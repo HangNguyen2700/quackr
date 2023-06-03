@@ -89,4 +89,20 @@ public class PostServiceImpl implements PostService {
                 .publishedBy(post.getUser().getDisplayName())
                 .build();
     }
+
+    @Override
+    public List<PostResponse> get3NewestPosts(){
+        Sort sort = Sort.by(Sort.Direction.DESC, "publishOn");
+        List<DBPost> posts = null;
+        for (int i = 0; i < 3; i++) {
+           posts.add(postRepository.findAll(sort).get(i));
+        }
+        return posts.stream().map((post) -> PostResponse.builder()
+                        .id(post.getId())
+                        .content(post.getContent())
+                        .publishedOn(post.getPublishedOn())
+                        .publishedBy(post.getUser().getDisplayName())
+                        .build())
+                .toList();
+    }
 }

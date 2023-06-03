@@ -48,4 +48,11 @@ public class PostController {
         PostResponse response = postService.updatePost(id, postRequest);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping(path = "3newest",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PostResponse>> get3NewestPosts() {
+        List<PostResponse> response = postService.get3NewestPosts();
+        return ResponseEntity.ok(response);
+    }
 }
