@@ -1,11 +1,13 @@
 package quackrbackend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import quackrbackend.payloads.PostRequest;
 import quackrbackend.payloads.PostResponse;
+import quackrbackend.payloads.SuccessResponse;
 import quackrbackend.services.PostService;
 
 import java.util.List;
@@ -19,40 +21,60 @@ public class PostController {
 
     @GetMapping(path = "newest",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostResponse> getNewestPost() {
-        PostResponse response = postService.getNewestPost();
+    public ResponseEntity<SuccessResponse<PostResponse>> getNewestPost() {
+        SuccessResponse<PostResponse> response = SuccessResponse.<PostResponse>builder()
+                .status(HttpStatus.OK.value())
+                .message("Get newest post successfully")
+                .data(postService.getNewestPost())
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostResponse>> getAllPosts() {
-        List<PostResponse> response = postService.getAllPosts();
+    public ResponseEntity<SuccessResponse<List<PostResponse>>> getAllPosts() {
+        SuccessResponse<List<PostResponse>> response = SuccessResponse.<List<PostResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Get all posts successfully")
+                .data(postService.getAllPosts())
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity.HeadersBuilder<?> deletePostById(@PathVariable long id) {
+    public ResponseEntity<Void> deletePostById(@PathVariable long id) {
         postService.deleteByPostId(id);
-        return ResponseEntity.noContent();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest) {
-        PostResponse response = postService.createPost(postRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<SuccessResponse<PostResponse>> createPost(@RequestBody PostRequest postRequest) {
+        SuccessResponse<PostResponse> response = SuccessResponse.<PostResponse>builder()
+                .status(HttpStatus.CREATED.value())
+                .message("Create post successfully")
+                .data(postService.createPost(postRequest))
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping(path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostResponse> createPost(@PathVariable long id, @RequestBody PostRequest postRequest) {
-        PostResponse response = postService.updatePost(id, postRequest);
+    public ResponseEntity<SuccessResponse<PostResponse>> createPost(@PathVariable long id, @RequestBody PostRequest postRequest) {
+        SuccessResponse<PostResponse> response = SuccessResponse.<PostResponse>builder()
+                .status(HttpStatus.OK.value())
+                .message("Update post successfully")
+                .data(postService.updatePost(id, postRequest))
+                .build();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(path = "3newest",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PostResponse>> get3NewestPosts() {
-        List<PostResponse> response = postService.get3NewestPosts();
+    public ResponseEntity<SuccessResponse<List<PostResponse>>> get3NewestPosts() {
+        SuccessResponse<List<PostResponse>> response = SuccessResponse.<List<PostResponse>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Get 3 newest posts successfully")
+                .data(postService.get3NewestPosts())
+                .build();
         return ResponseEntity.ok(response);
     }
 }
