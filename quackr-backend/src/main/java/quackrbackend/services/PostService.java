@@ -11,4 +11,6 @@ public interface PostService {
     void deleteByPostId(long postId);
     PostResponse createPost(PostRequest postRequest);
     PostResponse updatePost(long postId, PostRequest postRequest);
+    List<PostResponse> get3NewestPosts();
+
 }
