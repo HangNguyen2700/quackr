@@ -13,7 +13,7 @@ import java.util.Date;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "post")
+@Table(name = "posts")
 @Entity
 public class DBPost extends DBIdentified {
 
@@ -24,6 +24,6 @@ public class DBPost extends DBIdentified {
     private Date publishedOn;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private DBUser user;
+    @JoinColumn(name = "published_by")
+    private DBUser publishedBy;
 }

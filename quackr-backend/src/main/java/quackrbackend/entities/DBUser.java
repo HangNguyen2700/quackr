@@ -11,13 +11,12 @@ import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "user", uniqueConstraints = {
+@Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {
                 "username"
         })
 })
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
@@ -31,6 +30,6 @@ public class DBUser extends DBIdentified {
 
     private Role role;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "publishedBy")
     private Set<DBPost> posts;
 }

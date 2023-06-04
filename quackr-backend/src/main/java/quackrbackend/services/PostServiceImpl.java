@@ -13,6 +13,7 @@ import quackrbackend.repositories.UserRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,12 +29,7 @@ public class PostServiceImpl implements PostService {
     public PostResponse getNewestPost() {
         Sort sort = Sort.by(Sort.Direction.DESC, "publishedOn");
         DBPost post = postRepository.findAll(sort).get(0);
-        return PostResponse.builder()
-                .id(post.getId())
-                .content(post.getContent())
-                .publishedOn(post.getPublishedOn())
-                .publishedBy(post.getUser().getDisplayName())
-                .build();
+        return convertEntityToPayload(post);
     }
 
     @Override
@@ -41,13 +37,8 @@ public class PostServiceImpl implements PostService {
         List<DBPost> posts = postRepository.findAll();
         return posts
                 .stream()
-                .map((post) -> PostResponse.builder()
-                    .id(post.getId())
-                    .content(post.getContent())
-                    .publishedOn(post.getPublishedOn())
-                    .publishedBy(post.getUser().getDisplayName())
-                    .build())
-                .toList();
+                .map(this::convertEntityToPayload)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -61,15 +52,10 @@ public class PostServiceImpl implements PostService {
         DBPost post = DBPost.builder()
                 .content(postRequest.getContent())
                 .publishedOn(new Date())
-                .user(user)
+                .publishedBy(user)
                 .build();
         postRepository.save(post);
-        return PostResponse.builder()
-                .id(post.getId())
-                .content(post.getContent())
-                .publishedOn(post.getPublishedOn())
-                .publishedBy(post.getUser().getDisplayName())
-                .build();
+        return convertEntityToPayload(post);
     }
 
     @Override
@@ -79,14 +65,18 @@ public class PostServiceImpl implements PostService {
                 .id(postId)
                 .content(postRequest.getContent())
                 .publishedOn(new Date())
-                .user(user)
+                .publishedBy(user)
                 .build();
         postRepository.save(post);
+        return convertEntityToPayload(post);
+    }
+
+    private PostResponse convertEntityToPayload(DBPost post) {
         return PostResponse.builder()
                 .id(post.getId())
                 .content(post.getContent())
                 .publishedOn(post.getPublishedOn())
-                .publishedBy(post.getUser().getDisplayName())
+                .publishedBy(post.getPublishedBy().getDisplayName())
                 .build();
     }
 }
