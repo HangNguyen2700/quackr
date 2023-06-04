@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import quackrbackend.entities.DBPost;
 import quackrbackend.entities.DBUser;
+import quackrbackend.exceptions.NotFoundException;
 import quackrbackend.payloads.PostRequest;
 import quackrbackend.payloads.PostResponse;
 import quackrbackend.repositories.PostRepository;
@@ -15,6 +16,7 @@ import quackrbackend.repositories.UserRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,7 +75,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse updatePost(long postId, PostRequest postRequest) {
-        DBUser user = userRepository.findById(postRequest.getUserId()).get();
+        DBUser user = userRepository.findById(postRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("User not found with ID: " + postRequest.getUserId()));
         DBPost post = DBPost.builder()
                 .id(postId)
                 .content(postRequest.getContent())

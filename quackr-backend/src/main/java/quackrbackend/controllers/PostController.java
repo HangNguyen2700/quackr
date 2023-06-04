@@ -19,7 +19,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping(path = "newest",
+    @GetMapping(path = "/newest",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<PostResponse>> getNewestPost() {
         SuccessResponse<PostResponse> response = SuccessResponse.<PostResponse>builder()
@@ -56,13 +56,13 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping(path = "/{id}",
+    @PutMapping(path = "/{postId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<PostResponse>> createPost(@PathVariable long id, @RequestBody PostRequest postRequest) {
+    public ResponseEntity<SuccessResponse<PostResponse>> updatePost(@PathVariable long postId, @RequestBody PostRequest postRequest) {
         SuccessResponse<PostResponse> response = SuccessResponse.<PostResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Update post successfully")
-                .data(postService.updatePost(id, postRequest))
+                .data(postService.updatePost(postId, postRequest))
                 .build();
         return ResponseEntity.ok(response);
     }
