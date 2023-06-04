@@ -1,6 +1,8 @@
 package quackrbackend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +61,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostResponse> get3NewestPosts(){
+        Sort sort = Sort.by(Sort.Direction.DESC, "publishedOn");
+        Pageable pageable = PageRequest.of(0, 3, sort);
+        List<DBPost> posts = postRepository.findAll(pageable).toList();
+        return posts
+                .stream()
+                .map(this::convertEntityToPayload)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public PostResponse updatePost(long postId, PostRequest postRequest) {
         DBUser user = userRepository.findById(postRequest.getUserId()).get();
         DBPost post = DBPost.builder()
@@ -78,21 +91,5 @@ public class PostServiceImpl implements PostService {
                 .publishedOn(post.getPublishedOn())
                 .publishedBy(post.getPublishedBy().getDisplayName())
                 .build();
-    }
-
-    @Override
-    public List<PostResponse> get3NewestPosts(){
-        Sort sort = Sort.by(Sort.Direction.DESC, "publishOn");
-        List<DBPost> posts = null;
-        for (int i = 0; i < 3; i++) {
-           posts.add(postRepository.findAll(sort).get(i));
-        }
-        return posts.stream().map((post) -> PostResponse.builder()
-                        .id(post.getId())
-                        .content(post.getContent())
-                        .publishedOn(post.getPublishedOn())
-                        .publishedBy(post.getUser().getDisplayName())
-                        .build())
-                .toList();
     }
 }
