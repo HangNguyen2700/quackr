@@ -67,7 +67,7 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(path = "3newest",
+    @GetMapping(path = "/3newest",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SuccessResponse<List<PostResponse>>> get3NewestPosts() {
         SuccessResponse<List<PostResponse>> response = SuccessResponse.<List<PostResponse>>builder()

@@ -1,6 +1,7 @@
 package quackrbackend.entities;
 
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,6 @@ import lombok.experimental.SuperBuilder;
 public class DBIdentified {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 }
