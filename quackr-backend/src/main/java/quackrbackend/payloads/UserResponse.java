@@ -14,5 +14,4 @@ public class UserResponse {
     private String username;
     private String displayName;
     private String role;
-    private String token;
 }

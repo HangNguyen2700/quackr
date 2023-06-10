@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import quackrbackend.entities.DBPost;
 import quackrbackend.entities.DBUser;
-import quackrbackend.exceptions.NotFoundException;
+import quackrbackend.entities.Role;
+import quackrbackend.exceptions.ForbiddenException;
 import quackrbackend.payloads.PostRequest;
 import quackrbackend.payloads.PostResponse;
 import quackrbackend.repositories.PostRepository;
@@ -16,7 +17,6 @@ import quackrbackend.repositories.UserRepository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,12 +33,14 @@ public class PostServiceImpl implements PostService {
     public PostResponse getNewestPost() {
         Sort sort = Sort.by(Sort.Direction.DESC, "publishedOn");
         DBPost post = postRepository.findAll(sort).get(0);
+
         return convertEntityToPayload(post);
     }
 
     @Override
     public List<PostResponse> getAllPosts() {
         List<DBPost> posts = postRepository.findAll();
+
         return posts
                 .stream()
                 .map(this::convertEntityToPayload)
@@ -46,19 +48,29 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deleteByPostId(long postId) {
+    public void deletePostById(long postId) {
+        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
+
+        if (Role.USER == currentUser.getRole() && isPostBelongsToUser(postId, currentUser)) {
+            throw new ForbiddenException("Do not have access to delete post with postId = " + postId);
+        }
         postRepository.deleteById(postId);
+    }
+
+    private boolean isPostBelongsToUser(long postId, DBUser user) {
+        return user.getPosts().stream().anyMatch(post -> postId == post.getId());
     }
 
     @Override
     public PostResponse createPost(PostRequest postRequest) {
-        DBUser user = userRepository.findById(postRequest.getUserId()).get();
+        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
         DBPost post = DBPost.builder()
                 .content(postRequest.getContent())
                 .publishedOn(new Date())
-                .publishedBy(user)
+                .publishedBy(currentUser)
                 .build();
         postRepository.save(post);
+
         return convertEntityToPayload(post);
     }
 
@@ -67,6 +79,7 @@ public class PostServiceImpl implements PostService {
         Sort sort = Sort.by(Sort.Direction.DESC, "publishedOn");
         Pageable pageable = PageRequest.of(0, 3, sort);
         List<DBPost> posts = postRepository.findAll(pageable).toList();
+
         return posts
                 .stream()
                 .map(this::convertEntityToPayload)
@@ -74,16 +87,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse updatePost(long postId, PostRequest postRequest) {
-        DBUser user = userRepository.findById(postRequest.getUserId())
-                .orElseThrow(() -> new NotFoundException("User not found with ID: " + postRequest.getUserId()));
+    public PostResponse updatePostById(long postId, PostRequest postRequest) {
+        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
         DBPost post = DBPost.builder()
                 .id(postId)
                 .content(postRequest.getContent())
                 .publishedOn(new Date())
-                .publishedBy(user)
+                .publishedBy(currentUser)
                 .build();
         postRepository.save(post);
+
         return convertEntityToPayload(post);
     }
 

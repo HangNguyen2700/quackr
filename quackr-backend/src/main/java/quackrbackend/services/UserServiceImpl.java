@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserResponse signIn(SignInRequest signInRequest) throws JOSEException {
+    public String signIn(SignInRequest signInRequest) throws JOSEException {
         String username = signInRequest.getUsername();
         String password = signInRequest.getPassword();
 
@@ -34,11 +34,14 @@ public class UserServiceImpl implements UserService {
             throw new UnauthorizedException("Invalid credentials");
         }
 
-        return convertEntityToPayload(user);
+        return JWTUtil.createJWToken(JWTLoginData.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .build());
     }
 
     @Override
-    public UserResponse signUp(SignUpRequest signUpRequest) throws JOSEException {
+    public String signUp(SignUpRequest signUpRequest) throws JOSEException {
         userRepository.findDBUserByUsername(signUpRequest.getUsername()).ifPresent((user) -> {
             throw new DuplicatedException(String.format("%s already exists!", signUpRequest.getUsername()));
         });
@@ -51,19 +54,25 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
 
-        return convertEntityToPayload(user);
+        return JWTUtil.createJWToken(JWTLoginData.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .build());
     }
 
-    private UserResponse convertEntityToPayload(DBUser user) throws JOSEException {
+    @Override
+    public UserResponse getCurrentUser() {
+        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
+
+        return convertEntityToPayload(currentUser);
+    }
+
+    private UserResponse convertEntityToPayload(DBUser user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .displayName(user.getDisplayName())
                 .role(user.getRole().name())
-                .token(JWTUtil.createJWToken(JWTLoginData.builder()
-                        .username(user.getUsername())
-                        .password(user.getPassword())
-                        .build()))
                 .build();
     }
 }

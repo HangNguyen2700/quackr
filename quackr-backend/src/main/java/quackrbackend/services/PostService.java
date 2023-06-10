@@ -8,9 +8,9 @@ import java.util.List;
 public interface PostService {
     PostResponse getNewestPost();
     List<PostResponse> getAllPosts();
-    void deleteByPostId(long postId);
+    void deletePostById(long postId);
     PostResponse createPost(PostRequest postRequest);
-    PostResponse updatePost(long postId, PostRequest postRequest);
+    PostResponse updatePostById(long postId, PostRequest postRequest);
     List<PostResponse> get3NewestPosts();
 
 }

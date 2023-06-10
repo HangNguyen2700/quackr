@@ -42,7 +42,7 @@ public class PostController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deletePostById(@PathVariable long id) {
-        postService.deleteByPostId(id);
+        postService.deletePostById(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -62,7 +62,7 @@ public class PostController {
         SuccessResponse<PostResponse> response = SuccessResponse.<PostResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Update post successfully")
-                .data(postService.updatePost(postId, postRequest))
+                .data(postService.updatePostById(postId, postRequest))
                 .build();
         return ResponseEntity.ok(response);
     }

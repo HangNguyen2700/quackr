@@ -5,6 +5,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import quackrbackend.exceptions.UnauthorizedException;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -51,6 +54,16 @@ public class JWTUtil {
         } catch (ParseException | JOSEException ex) {
             return false;
         }
+    }
+
+    public static String getCurrentUsernameFromSubject() {
+        Subject subject = SecurityUtils.getSubject();
+
+        if (!subject.isAuthenticated()) {
+            throw new UnauthorizedException("Invalid credentials");
+        }
+
+        return (String) subject.getPrincipal();
     }
 
     private static byte[] getSharedKey() {
