@@ -35,12 +35,6 @@ export const tokenGetter = () => {
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatCardModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    FormsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
