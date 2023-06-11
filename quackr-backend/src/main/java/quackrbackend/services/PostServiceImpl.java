@@ -10,6 +10,7 @@ import quackrbackend.entities.DBPost;
 import quackrbackend.entities.DBUser;
 import quackrbackend.entities.Role;
 import quackrbackend.exceptions.ForbiddenException;
+import quackrbackend.exceptions.NotFoundException;
 import quackrbackend.payloads.PostRequest;
 import quackrbackend.payloads.PostResponse;
 import quackrbackend.repositories.PostRepository;
@@ -58,7 +59,10 @@ public class PostServiceImpl implements PostService {
     }
 
     private boolean isPostBelongsToUser(long postId, DBUser user) {
-        return user.getPosts().stream().anyMatch(post -> postId == post.getId());
+        DBPost post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException("Post not found with postId: " + postId));
+
+        return post.getPublishedBy().getId() == user.getId();
     }
 
     @Override
