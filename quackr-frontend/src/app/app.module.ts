@@ -9,13 +9,14 @@ import { LoginComponent } from './components/login/login.component';
 import { PostsComponent } from './components/posts/posts.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 export const tokenGetter = () => {
   return localStorage.getItem("token");
@@ -37,6 +38,8 @@ export const tokenGetter = () => {
     MatButtonModule,
     MatInputModule,
     MatCardModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
     FormsModule,
     JwtModule.forRoot({
       config: {

@@ -13,9 +13,6 @@ export class AuthGuardService {
       return false;
     }
 
-    // if (this.router.url === '/login') {
-    //   this.router.navigate(['home']);
-    // }
     return true;
   }
 }

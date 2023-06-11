@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -7,14 +8,31 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.sass']
 })
-export class LoginComponent {
-  username!: string;
-  password!: string;
+export class LoginComponent implements OnInit {
+  loginForm: FormGroup;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
+    this.loginForm = formBuilder.group({
+      username: formBuilder.control('', Validators.required),
+      password: formBuilder.control('', Validators.required)
+    });
+  }
+
+  ngOnInit() {
+    this.loginForm.reset({
+      username: '',
+      password: '',
+    });
+  }
 
   signIn(): void {
-    this.authService.signIn({ username: this.username, password: this.password })
+    if (!this.loginForm?.valid) {
+      return;
+    }
+
+    const { username, password } = this.loginForm.value;
+
+    this.authService.signIn({ username, password })
       .subscribe(response => {
         const token = response.token;
         // Store the token in local storage or any other storage mechanism
