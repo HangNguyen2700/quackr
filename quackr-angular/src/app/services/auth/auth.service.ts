@@ -20,7 +20,7 @@ export class AuthService {
     }));
   }
 
-  signUp(credentials: { username: string, password: string }): Observable<AuthResponse> {
+  signUp(credentials: { username: string, password: string, displayname: string }): Observable<AuthResponse> {
     return this.http.post<SuccessResponse<string>>(`${this.apiUrl}/signup`, credentials).pipe(map(response => {
       return { token: response.data };
     }));

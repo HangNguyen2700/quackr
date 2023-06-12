@@ -19,6 +19,8 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 export const tokenGetter = () => {
   return localStorage.getItem("token");
@@ -49,7 +51,8 @@ export const tokenGetter = () => {
     MatInputModule,
     MatCardModule,
     MatFormFieldModule,
-    MatToolbarModule
+    MatToolbarModule,
+    FlexLayoutModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
