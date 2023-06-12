@@ -1,0 +1,14 @@
+<mat-toolbar>
+  <span>Quackr</span>
+
+  <span class="spacer"></span>
+
+  <div *ngIf="!authService.isAuthenticated()">
+    <button mat-button routerLink="/sign-in">Sign In</button>
+    <button mat-button routerLink="/sign-up">Sign Up</button>
+  </div>
+
+  <div *ngIf="authService.isAuthenticated()">
+    <button mat-button (click)="signOut()">Logout</button>
+  </div>
+</mat-toolbar>

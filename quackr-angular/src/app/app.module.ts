@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JwtModule } from '@auth0/angular-jwt';
 import { HomeComponent } from './components/home/home.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
-import { JwtModule } from '@auth0/angular-jwt';
 
 export const tokenGetter = () => {
   return localStorage.getItem("token");
@@ -28,7 +30,8 @@ export const tokenGetter = () => {
     HomeComponent,
     SignInComponent,
     SignUpComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ export const tokenGetter = () => {
     MatButtonModule,
     MatInputModule,
     MatCardModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatToolbarModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
