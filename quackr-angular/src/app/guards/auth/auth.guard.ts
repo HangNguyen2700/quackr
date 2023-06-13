@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   providedIn: 'root'
 })
 export class AuthGuard {
-  constructor(public auth: AuthService, public router: Router) {}
+  constructor(private auth: AuthService, private router: Router) {}
   canActivate(): boolean {
     if (!this.auth.isAuthenticated()) {
       this.router.navigate(['sign-in']);

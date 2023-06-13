@@ -5,12 +5,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HomeComponent } from './components/home/home.component';
@@ -19,8 +22,9 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { PostListComponent } from './components/post-list/post-list.component';
+import { ErrorInterceptor } from './interceptors/error/error.interceptor';
 
 export const tokenGetter = () => {
   return localStorage.getItem("token");
@@ -33,7 +37,8 @@ export const tokenGetter = () => {
     SignInComponent,
     SignUpComponent,
     UserDetailsComponent,
-    NavigationComponent
+    NavigationComponent,
+    PostListComponent
   ],
   imports: [
     BrowserModule,
@@ -52,10 +57,13 @@ export const tokenGetter = () => {
     MatCardModule,
     MatFormFieldModule,
     MatToolbarModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatSnackBarModule,
+    MatIconModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,12 +1,10 @@
-package quackrbackend.services;
+package quackrbackend.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import quackrbackend.entities.DBUser;
 import quackrbackend.exceptions.NotFoundException;
 import quackrbackend.repositories.UserRepository;
-import quackrbackend.security.jwt.JWTUtil;
 
-public class ServiceUtil {
+public class UserUtil {
     public static DBUser getCurrentUser(UserRepository userRepository) {
         String currentUsername = JWTUtil.getCurrentUsernameFromSubject();
 

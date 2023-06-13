@@ -13,7 +13,8 @@ import quackrbackend.payloads.SignUpRequest;
 import quackrbackend.payloads.UserResponse;
 import quackrbackend.repositories.UserRepository;
 import quackrbackend.security.jwt.JWTLoginData;
-import quackrbackend.security.jwt.JWTUtil;
+import quackrbackend.utils.JWTUtil;
+import quackrbackend.utils.UserUtil;
 
 @Service
 @Transactional
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
         return JWTUtil.createJWToken(JWTLoginData.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .build());
+                .build(), user.getRole());
     }
 
     @Override
@@ -57,12 +58,12 @@ public class UserServiceImpl implements UserService {
         return JWTUtil.createJWToken(JWTLoginData.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .build());
+                .build(), user.getRole());
     }
 
     @Override
     public UserResponse getCurrentUser() {
-        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
+        DBUser currentUser = UserUtil.getCurrentUser(userRepository);
 
         return convertEntityToPayload(currentUser);
     }

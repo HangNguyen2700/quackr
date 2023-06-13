@@ -1,4 +1,4 @@
-package quackrbackend.security.jwt;
+package quackrbackend.utils;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -7,7 +7,9 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import quackrbackend.entities.Role;
 import quackrbackend.exceptions.UnauthorizedException;
+import quackrbackend.security.jwt.JWTLoginData;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -15,9 +17,9 @@ import java.util.UUID;
 
 public class JWTUtil {
 
-    public final static String ROLES_CLAIM = "roles";
+    public final static String ROLES_CLAIM = "role";
 
-    public static String createJWToken(JWTLoginData credentials) throws JOSEException {
+    public static String createJWToken(JWTLoginData credentials, Role role) throws JOSEException {
 
         final String user = credentials.getUsername();
 
@@ -28,10 +30,7 @@ public class JWTUtil {
         builder.issueTime(new Date());
         builder.jwtID(UUID.randomUUID().toString());
 
-        // add a custom claim for admins
-        if ("admin".equals(user)) {
-            builder.claim(ROLES_CLAIM, "admin");
-        }
+        builder.claim(ROLES_CLAIM, role.name());
 
         final JWTClaimsSet claimsSet = builder.build();
 

@@ -1,14 +1,15 @@
 <mat-toolbar>
-  <span>Quackr</span>
+  <button mat-button (click)="goHome()">Quackr</button>
 
   <span class="spacer"></span>
 
-  <div *ngIf="!authService.isAuthenticated()">
+  <div *ngIf="!isAuthenticated()">
     <button mat-button routerLink="/sign-in">Sign In</button>
     <button mat-button routerLink="/sign-up">Sign Up</button>
   </div>
 
-  <div *ngIf="authService.isAuthenticated()">
-    <button mat-button (click)="signOut()">Logout</button>
+  <div *ngIf="isAuthenticated()">
+    <button mat-button color="" routerLink="/user-details">{{ currentUser?.displayName }}</button>
+    <button mat-stroked-button (click)="signOut()">Logout</button>
   </div>
 </mat-toolbar>

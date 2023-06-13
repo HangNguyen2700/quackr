@@ -15,6 +15,7 @@ import quackrbackend.payloads.PostRequest;
 import quackrbackend.payloads.PostResponse;
 import quackrbackend.repositories.PostRepository;
 import quackrbackend.repositories.UserRepository;
+import quackrbackend.utils.UserUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -49,10 +50,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePostById(long postId) {
-        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
+    public List<PostResponse> getCurrentUserPosts() {
+        DBUser currentUser = UserUtil.getCurrentUser(userRepository);
+        List<DBPost> posts = postRepository.findAllByPublishedBy(currentUser);
 
-        if (Role.USER == currentUser.getRole() && isPostBelongsToUser(postId, currentUser)) {
+        return posts
+                .stream()
+                .map(this::convertEntityToPayload)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deletePostById(long postId) {
+        DBUser currentUser = UserUtil.getCurrentUser(userRepository);
+
+        if (Role.USER == currentUser.getRole() && !isPostBelongsToUser(postId, currentUser)) {
             throw new ForbiddenException("Do not have access to delete post with postId = " + postId);
         }
         postRepository.deleteById(postId);
@@ -67,7 +79,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse createPost(PostRequest postRequest) {
-        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
+        DBUser currentUser = UserUtil.getCurrentUser(userRepository);
         DBPost post = DBPost.builder()
                 .content(postRequest.getContent())
                 .publishedOn(new Date())
@@ -92,7 +104,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponse updatePostById(long postId, PostRequest postRequest) {
-        DBUser currentUser = ServiceUtil.getCurrentUser(userRepository);
+        DBUser currentUser = UserUtil.getCurrentUser(userRepository);
         DBPost post = DBPost.builder()
                 .id(postId)
                 .content(postRequest.getContent())
@@ -109,7 +121,8 @@ public class PostServiceImpl implements PostService {
                 .id(post.getId())
                 .content(post.getContent())
                 .publishedOn(post.getPublishedOn())
-                .publishedBy(post.getPublishedBy().getDisplayName())
+                .authorUsername(post.getPublishedBy().getUsername())
+                .authorName(post.getPublishedBy().getDisplayName())
                 .build();
     }
 }

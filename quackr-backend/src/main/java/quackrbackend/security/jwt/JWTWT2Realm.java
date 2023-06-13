@@ -5,6 +5,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.realm.AuthenticatingRealm;
+import quackrbackend.utils.JWTUtil;
 
 public class JWTWT2Realm extends AuthenticatingRealm {
 

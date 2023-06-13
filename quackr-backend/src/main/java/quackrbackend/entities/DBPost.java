@@ -17,6 +17,7 @@ import java.util.Date;
 @Entity
 public class DBPost extends DBIdentified {
 
+    @Lob
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)

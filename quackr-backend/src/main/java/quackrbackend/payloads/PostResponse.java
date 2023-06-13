@@ -15,5 +15,6 @@ public class PostResponse {
     private long id;
     private String content;
     private Date publishedOn;
-    private String publishedBy;
+    private String authorUsername;
+    private String authorName;
 }

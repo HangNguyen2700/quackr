@@ -15,12 +15,15 @@ export class SignInComponent {
 
   signIn(): void {
     this.authService.signIn({ username: this.username, password: this.password })
-      .subscribe(response => {
-        const token = response.token;
-        // Store the token in local storage or any other storage mechanism
-        localStorage.setItem('token', token);
-        // Redirect to the homepage or any other route
-        this.router.navigate(['/']);
+      .subscribe({
+        next: response => {
+          const token = response.token;
+          // Store the token in local storage or any other storage mechanism
+          localStorage.setItem('token', token);
+          // Redirect to the homepage or any other route
+          this.router.navigate(['/']);
+        },
+        error: () => {}
       });
   }
 }
