@@ -1,6 +1,10 @@
 <mat-toolbar>
   <button mat-button (click)="goHome()">Quackr</button>
 
+  <div *ngIf="isAuthenticated()">
+    <button mat-button (click)="openPostDialog()">Create</button>
+  </div>
+
   <span class="spacer"></span>
 
   <div *ngIf="!isAuthenticated()">
@@ -9,7 +13,7 @@
   </div>
 
   <div *ngIf="isAuthenticated()">
-    <button mat-button color="" routerLink="/user-details">{{ currentUser?.displayName }}</button>
+    <button mat-button routerLink="/user-details">{{ currentUser?.displayName }}</button>
     <button mat-stroked-button (click)="signOut()">Logout</button>
   </div>
 </mat-toolbar>

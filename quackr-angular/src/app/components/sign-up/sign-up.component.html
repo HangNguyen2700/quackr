@@ -2,15 +2,15 @@
 <mat-card class="center">
   <mat-card-title>Sign Up</mat-card-title>
   <mat-card-content>
-    <form (ngSubmit)="signUp()" class="form">
+    <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="form">
       <mat-form-field>
-        <input matInput placeholder="Username" [(ngModel)]="username" name="username" required class="item">
+        <input matInput formControlName="username" placeholder="Username" name="username" required class="item">
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Password" [(ngModel)]="password" name="password" required class="item">
+        <input matInput formControlName="password" placeholder="Password" type="password" name="password" required class="item">
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Displayname" [(ngModel)]="password" name="displayname" required class="item">
+        <input matInput formControlName="displayName" placeholder="Display name" name="displayName" required class="item">
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Sign Up</button>
     </form>

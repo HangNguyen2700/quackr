@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<DBPost, Long> {
-    List<DBPost> findAllByPublishedBy(DBUser publishedBy);
+    List<DBPost> findAllByPublishedByOrderByPublishedOnDesc(DBUser publishedBy);
 }

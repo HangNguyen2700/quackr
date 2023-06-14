@@ -41,7 +41,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResponse> getAllPosts() {
-        List<DBPost> posts = postRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "publishedOn");
+        List<DBPost> posts = postRepository.findAll(sort);
 
         return posts
                 .stream()
@@ -52,7 +53,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponse> getCurrentUserPosts() {
         DBUser currentUser = UserUtil.getCurrentUser(userRepository);
-        List<DBPost> posts = postRepository.findAllByPublishedBy(currentUser);
+        List<DBPost> posts = postRepository.findAllByPublishedByOrderByPublishedOnDesc(currentUser);
 
         return posts
                 .stream()

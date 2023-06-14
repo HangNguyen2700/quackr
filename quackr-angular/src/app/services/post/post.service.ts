@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, map } from 'rxjs';
-import { PostResponse } from 'src/app/models/post.model';
+import { PostRequest, PostResponse } from 'src/app/models/post.model';
 import { Role } from 'src/enums/user.enum';
 import { SuccessResponse, Token } from 'src/types/payload.type';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,21 @@ export class PostService {
   private username = '';
   private role = '';
 
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {
+  constructor(
+    private http: HttpClient,
+    private jwtHelper: JwtHelperService,
+    private authService: AuthService
+  ) {
+    this.initToken()
+    this.authService.getEmitter().subscribe((customObject) => {
+      this.initToken()
+    });
+  }
+
+  initToken(): void {
     const decodeToken = this.jwtHelper.decodeToken() as Token;
-    this.username = decodeToken.sub;
-    this.role = decodeToken.role;
+    this.username = decodeToken?.sub;
+    this.role = decodeToken?.role;
   }
 
   getAllPosts(): Observable<PostResponse[]> {
@@ -28,6 +40,18 @@ export class PostService {
 
   deletePostById(postId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${postId}`);
+  }
+
+  editPost(postId: number, postData: PostRequest): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${postId}`, postData);
+  }
+
+  createPost(postData: PostRequest): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}`, postData);
+  }
+
+  canEditPost(post: PostResponse): boolean {
+    return post.authorUsername === this.username;
   }
 
   canDeletePost(post: PostResponse): boolean {

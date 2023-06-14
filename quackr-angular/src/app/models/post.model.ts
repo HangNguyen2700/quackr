@@ -5,3 +5,7 @@ export interface PostResponse {
   publishedOn: string;
   authorName: string;
 }
+
+export interface PostRequest {
+  content: string;
+}

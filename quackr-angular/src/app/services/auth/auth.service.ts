@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, map } from 'rxjs';
 import { LoginRequest, AuthResponse } from 'src/app/models/auth.model';
@@ -10,6 +10,7 @@ import { SuccessResponse } from 'src/types/payload.type';
 })
 export class AuthService {
   private apiUrl = '/api/auth';
+  @Output() fireIsLoggedIn: EventEmitter<any> = new EventEmitter<any>
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
 
@@ -34,4 +35,8 @@ export class AuthService {
 
     return !this.jwtHelper.isTokenExpired(token);
   }
+
+  getEmitter() { 
+    return this.fireIsLoggedIn; 
+  } 
 }
