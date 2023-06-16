@@ -106,12 +106,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostResponse updatePostById(long postId, PostRequest postRequest) {
         DBUser currentUser = UserUtil.getCurrentUser(userRepository);
-        DBPost post = DBPost.builder()
-                .id(postId)
-                .content(postRequest.getContent())
-                .publishedOn(new Date())
-                .publishedBy(currentUser)
-                .build();
+
+        if (!isPostBelongsToUser(postId, currentUser)) {
+            throw new ForbiddenException("Do not have access to update post with postId = " + postId);
+        }
+        DBPost post = postRepository.findById(postId).get();
+        post.setContent(postRequest.getContent());
         postRepository.save(post);
 
         return convertEntityToPayload(post);

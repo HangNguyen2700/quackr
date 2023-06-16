@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { PostRequest } from 'src/app/models/post.model';
 import { Dialog } from 'src/types/dialog.type';
+import { PostFormComponent } from '../post-form/post-form.component';
 
 @Component({
   selector: 'app-post-dialog',
@@ -9,6 +10,7 @@ import { Dialog } from 'src/types/dialog.type';
   styleUrls: ['./post-dialog.component.css']
 })
 export class PostDialogComponent {
+  @ViewChild(PostFormComponent) postFormComponent!: PostFormComponent;
 
   constructor(
     public dialogRef: MatDialogRef<PostDialogComponent>,

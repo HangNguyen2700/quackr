@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit {
 
   openPostDialog(): void {
     const dialogRef = this.dialog.open(PostDialogComponent, {
-      width: '70%',
+      width: '40%',
       data: { dialogTitle: 'Create Post' }
     });
 

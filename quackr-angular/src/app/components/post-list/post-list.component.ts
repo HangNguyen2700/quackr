@@ -19,7 +19,7 @@ export class PostListComponent {
 
   openPostDialog(post: PostResponse): void {
     const dialogRef = this.dialog.open(PostDialogComponent, {
-      width: '70%',
+      width: '40%',
       data: { dialogTitle: 'Edit Post', data: post }
     });
 

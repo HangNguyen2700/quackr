@@ -4,13 +4,16 @@
   <mat-card-content>
     <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="form">
       <mat-form-field>
-        <input matInput formControlName="username" placeholder="Username" name="username" required class="item">
+        <input matInput formControlName="username" placeholder="Username" name="username" class="item">
+        <mat-error *ngIf="signUpForm.controls['username'].hasError('required')">Username is required</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput formControlName="password" placeholder="Password" type="password" name="password" required class="item">
+        <input matInput formControlName="password" placeholder="Password" type="password" name="password" class="item">
+        <mat-error *ngIf="signUpForm.controls['password'].hasError('required')">Password is required</mat-error>
       </mat-form-field>
       <mat-form-field>
-        <input matInput formControlName="displayName" placeholder="Display name" name="displayName" required class="item">
+        <input matInput formControlName="displayName" placeholder="Display name" name="displayName" class="item">
+        <mat-error *ngIf="signUpForm.controls['displayName'].hasError('required')">Display name is required</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Sign Up</button>
     </form>
