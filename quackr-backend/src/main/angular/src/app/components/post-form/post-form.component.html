@@ -1,0 +1,6 @@
+<form [formGroup]="postForm" (ngSubmit)="onSave()">
+  <mat-form-field>
+    <textarea matInput formControlName="content" placeholder="Content" rows="10"></textarea>
+    <mat-error *ngIf="postForm.controls['content'].hasError('required')">Content is required</mat-error>
+  </mat-form-field>
+</form>

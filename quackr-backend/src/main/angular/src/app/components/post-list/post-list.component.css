@@ -1,0 +1,17 @@
+.container {
+  margin-top: 16px;
+}
+
+mat-card {
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+.post {
+  margin-bottom: 16px;
+  padding: 16px;
+}
+
+mat-card-content {
+  margin-top: 8px;
+}
