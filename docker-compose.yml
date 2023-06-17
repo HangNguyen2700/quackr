@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  backend:
+    image: backend-image
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+  frontend:
+    image: frontend-image
+    ports:
+      - "3000:4200"
+    depends_on:
+      - backend
+    restart: unless-stopped
