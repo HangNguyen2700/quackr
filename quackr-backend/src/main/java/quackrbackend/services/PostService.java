@@ -13,5 +13,5 @@ public interface PostService {
     PostResponse createPost(PostRequest postRequest);
     PostResponse updatePostById(long postId, PostRequest postRequest);
     List<PostResponse> get3NewestPosts();
-
+    void resetAllPosts();
 }

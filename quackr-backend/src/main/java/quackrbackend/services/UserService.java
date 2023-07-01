@@ -9,4 +9,5 @@ public interface UserService {
     String signIn(SignInRequest signInRequest) throws JOSEException;
     String signUp(SignUpRequest signUpRequest) throws JOSEException;
     UserResponse getCurrentUser();
+    void resetAllUsers();
 }

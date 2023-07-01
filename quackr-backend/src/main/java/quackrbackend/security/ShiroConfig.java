@@ -38,6 +38,7 @@ public class ShiroConfig {
 
         chainDefinition.put("/api/auth/**", "anon");
         chainDefinition.put("/api/public/**", "anon");
+        chainDefinition.put("/api/reset/**", "anon");
         chainDefinition.put("/api/**", "noSessionCreation, jwtFilter");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(chainDefinition);

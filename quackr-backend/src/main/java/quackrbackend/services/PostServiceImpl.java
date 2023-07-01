@@ -126,4 +126,8 @@ public class PostServiceImpl implements PostService {
                 .authorName(post.getPublishedBy().getDisplayName())
                 .build();
     }
+
+    public void resetAllPosts(){
+        postRepository.deleteAll();
+    }
 }

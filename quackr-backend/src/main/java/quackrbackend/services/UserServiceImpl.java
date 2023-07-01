@@ -76,4 +76,8 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole().name())
                 .build();
     }
+
+    public void resetAllUsers(){
+        userRepository.deleteAll();
+    }
 }

@@ -1,6 +1,8 @@
 package quackrbackend.controllers;
 
 import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,12 +33,20 @@ public class AuthController {
 
     @PostMapping(path = "/signup",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<SuccessResponse<String>> signUp(@RequestBody SignUpRequest signUpRequest) throws JOSEException {
+    public ResponseEntity<SuccessResponse<String>> signUp(@RequestBody SignUpRequest signUpRequest, HttpServletResponse httpResponse) throws JOSEException {
+        String token = userService.signUp(signUpRequest);
+        // create a cookie
+        Cookie cookie = new Cookie("token", token);
+        //add cookie to response
+        httpResponse.addCookie(cookie);
+
         SuccessResponse<String> response = SuccessResponse.<String>builder()
                 .status(HttpStatus.OK.value())
                 .message("Sign up successfully")
-                .data(userService.signUp(signUpRequest))
+                .data(token)
                 .build();
+
+
         return ResponseEntity.ok(response);
     }
 }
